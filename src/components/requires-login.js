@@ -14,6 +14,7 @@ export default () => Component => {
         return <Component {...passThroughProps} />;
     }
 
+    // what is this doing? 
     const displayName = Component.displayName || Component.name || 'Component';
     RequiresLogin.displayName = `RequiresLogin(${displayName})`;
 

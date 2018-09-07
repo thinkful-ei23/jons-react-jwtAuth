@@ -6,8 +6,9 @@ import HeaderBar from './header-bar';
 import LandingPage from './landing-page';
 import Dashboard from './dashboard';
 import RegistrationPage from './registration-page';
-import {refreshAuthToken} from '../actions/auth';
+import {refreshAuthToken, clearAuth} from '../actions/auth';
 
+import {clearAuthToken} from '../local-storage.js';
 export class App extends React.Component {
     componentDidUpdate(prevProps) {
         if (!prevProps.loggedIn && this.props.loggedIn) {
@@ -21,12 +22,29 @@ export class App extends React.Component {
 
     componentWillUnmount() {
         this.stopPeriodicRefresh();
+        this.props.dispatch(clearAuth());
     }
+
+    //---------------
+
+    componentWillMount() {
+        this.onRefresh();
+    }
+
+    onRefresh() {
+        window.onbeforeunload = (e) => {
+            this.props.dispatch(clearAuth());
+            clearAuthToken();
+        }
+    }
+    //--------------
 
     startPeriodicRefresh() {
         this.refreshInterval = setInterval(
             () => this.props.dispatch(refreshAuthToken()),
-            60 * 60 * 1000 // One hour
+            // 60 * 60 * 1000 // One Hour
+            60 * 10 * 1000 // Ten minutes
+            // 5 * 1000 // 10 secs
         );
     }
 

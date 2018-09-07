@@ -2,10 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import requiresLogin from './requires-login';
 import {fetchProtectedData} from '../actions/protected-data';
+// import { clearAuth } from '../actions/auth';
 
 export class Dashboard extends React.Component {
     componentDidMount() {
         this.props.dispatch(fetchProtectedData());
+        // setTimeout(function(){this.props.dispatch(clearAuth())}, 1000 * 5)
     }
 
     render() {
@@ -32,4 +34,6 @@ const mapStateToProps = state => {
     };
 };
 
+// ***** explain this line
 export default requiresLogin()(connect(mapStateToProps)(Dashboard));
+// function()();

@@ -4,7 +4,10 @@ import {registerUser} from '../actions/users';
 import {login} from '../actions/auth';
 import Input from './input';
 import {required, nonEmpty, matches, length, isTrimmed} from '../validators';
+
+// length validator from ../validators
 const passwordLength = length({min: 10, max: 72});
+// matches validator from ../validators
 const matchesPassword = matches('password');
 
 export class RegistrationForm extends React.Component {
@@ -12,7 +15,8 @@ export class RegistrationForm extends React.Component {
         const {username, password, firstName, lastName} = values;
         const user = {username, password, firstName, lastName};
         return this.props
-            .dispatch(registerUser(user))
+            .dispatch(registerUser(user))  // Responsible for creating the new user
+            // and if that is successful then the login action will automatically log the user in without them needing to reenter their username and password.
             .then(() => this.props.dispatch(login(username, password)));
     }
 
@@ -57,7 +61,8 @@ export class RegistrationForm extends React.Component {
         );
     }
 }
-
+// equivalent to React Redux's connect method
+// https://courses.thinkful.com/react-001v3/assignment/3.6
 export default reduxForm({
     form: 'registration',
     onSubmitFail: (errors, dispatch) =>

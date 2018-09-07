@@ -5,17 +5,22 @@ import {loadAuthToken} from './local-storage';
 import authReducer from './reducers/auth';
 import protectedDataReducer from './reducers/protected-data';
 import {setAuthToken, refreshAuthToken} from './actions/auth';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
 
 const store = createStore(
     combineReducers({
         form: formReducer,
         auth: authReducer,
         protectedData: protectedDataReducer
-    }),
-    applyMiddleware(thunk)
+    }), composeWithDevTools(applyMiddleware(thunk))
 );
 
 // Hydrate the authToken from localStorage if it exist
+
+// With the JWT stored, all that remains for persistence to work is 
+// to reload the token when the application loads. We do this in src/store.js:
+
 const authToken = loadAuthToken();
 if (authToken) {
     const token = authToken;
